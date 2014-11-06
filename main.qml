@@ -9,8 +9,6 @@ ApplicationWindow {
 
     Image {
         id: camera
-        width: 500
-        height: 480
         source: "image://webcamimageprovider/yellow"
         cache: false
         function reload() {
@@ -27,15 +25,25 @@ ApplicationWindow {
     }
 
     Button {
-        x: 700
-        y: 20
-        width: 80
-        height: 80
-        text: "Start/Stop"
+        id: trainingButton
+        objectName: "trainingButton"
+        anchors.left: camera.right
+        property var isCurrentlyTraining: false
+        width: 100
+        height: 100
+        text: "Start Training"
+        signal startTraining()
+        signal stopTraining()
         onClicked:
-            if (camtimer.running)
-                camtimer.stop()
-            else
-                camtimer.start()
+            if (isCurrentlyTraining){
+                trainingButton.text="Stop Training"
+                trainingButton.stopTraining()
+                isCurrentlyTraining=false
+            }
+            else {
+                trainingButton.text="Start Training"
+                trainingButton.startTraining()
+                isCurrentlyTraining=true
+            }
     }
 }

@@ -3,7 +3,8 @@ TEMPLATE = app
 QT += qml quick widgets
 
 SOURCES += main.cpp \
-    webcamimageprovider.cpp
+    webcamimageprovider.cpp \
+    facerecognizer.cpp
 
 RESOURCES += qml.qrc
 
@@ -14,6 +15,7 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    webcamimageprovider.h
+    webcamimageprovider.h \
+    facerecognizer.h
 unix: CONFIG += link_pkgconfig
 unix: PKGCONFIG += opencv
