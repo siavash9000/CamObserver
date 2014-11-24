@@ -3,7 +3,6 @@ int OpenCVQTConverter::objectCount = 0;
 
 OpenCVQTConverter::OpenCVQTConverter()
 {
-    qWarning("OpenCVQTConverter()");
     m_camera = cvCaptureFromCAM(CV_CAP_ANY);
     assert(m_camera);
     IplImage *image = cvQueryFrame(m_camera);
@@ -14,7 +13,6 @@ OpenCVQTConverter::OpenCVQTConverter()
 QPixmap OpenCVQTConverter::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
     IplImage *cvimage = cvQueryFrame(m_camera);
-    assert(cvimage);
     int cvIndex, cvLineStart;
 
     switch (cvimage->depth) {
