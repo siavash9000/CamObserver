@@ -1,11 +1,10 @@
 #include "webcamimageprovider.h"
 
-WebcamImageProvider::WebcamImageProvider()
-    : QQuickImageProvider(QQuickImageProvider::Pixmap)
-{
-}
+WebcamImageProvider::WebcamImageProvider(WebCamWrapper& webCam)
+    : QQuickImageProvider(QQuickImageProvider::Pixmap),webCamWrapper(webCam)
+{}
 
 QPixmap WebcamImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
-   return converter.requestPixmap(id,size,requestedSize);
+   return webCamWrapper.requestPixmap(id,size,requestedSize);
 }

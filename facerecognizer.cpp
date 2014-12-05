@@ -7,6 +7,7 @@ FaceRecognizer::FaceRecognizer()
 
 void FaceRecognizer::startTrainingFromWebcam() {
     qDebug() << "Starting the training";
+
 }
 
 void FaceRecognizer::stopTrainingFromWebcam() {

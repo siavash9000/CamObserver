@@ -6,14 +6,15 @@
 #include <QDebug>
 #include <opencv/cv.h>
 
-class OpenCVQTConverter
+class WebCamWrapper
 {
 public:
-    OpenCVQTConverter();
+    WebCamWrapper();
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 private:
     CvCapture* m_camera;
     QImage m_image;
+    IplImage *m_openCV_image;
     static int objectCount;
 };
 

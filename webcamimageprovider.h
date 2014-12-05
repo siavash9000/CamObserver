@@ -2,15 +2,15 @@
 #define WEBCAMIMAGEPROVIDER_H
 
 #include <QQuickImageProvider>
-#include "opencvqtconverter.h"
+#include "webcamwrapper.h"
 
 class WebcamImageProvider : public QQuickImageProvider
 {
 public:
-    WebcamImageProvider();
+    WebcamImageProvider(WebCamWrapper& webCam);
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 private:
-    OpenCVQTConverter converter;
+    WebCamWrapper& webCamWrapper;
 
 };
 #endif // WEBCAMIMAGEPROVIDER_H

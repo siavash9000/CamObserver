@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    engine.addImageProvider(QLatin1String("webcamimageprovider"), new WebcamImageProvider());
+    WebCamWrapper webCamWrapper;
+    engine.addImageProvider(QLatin1String("webcamimageprovider"), new WebcamImageProvider(webCamWrapper));
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     QObject *root = engine.rootObjects().first();

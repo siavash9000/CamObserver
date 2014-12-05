@@ -5,7 +5,7 @@ QT += qml quick widgets
 SOURCES += main.cpp \
     webcamimageprovider.cpp \
     facerecognizer.cpp \
-    opencvqtconverter.cpp
+    webcamwrapper.cpp
 
 RESOURCES += qml.qrc
 
@@ -18,6 +18,6 @@ include(deployment.pri)
 HEADERS += \
     webcamimageprovider.h \
     facerecognizer.h \
-    opencvqtconverter.h
+    webcamwrapper.h
 unix: CONFIG += link_pkgconfig
 unix: PKGCONFIG += opencv
