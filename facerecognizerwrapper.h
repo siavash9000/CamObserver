@@ -25,6 +25,7 @@ private:
     QTimer *timer;
     Mat convertIplImageToMatrix(IplImage* iplImage);
     Ptr<FaceRecognizer> model;
+    int label;
 public
 slots:
     void doTraining();
