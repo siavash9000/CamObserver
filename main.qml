@@ -46,4 +46,17 @@ ApplicationWindow {
                 isCurrentlyTraining=true
             }
     }
+
+    Button {
+        id: predictionButton
+        objectName: "predictionButton"
+        anchors.left: camera.right
+        anchors.top: trainingButton.bottom
+        width: 100
+        height: 100
+        text: "Predict"
+        signal predict()
+        onClicked:
+            predictionButton.predict()
+    }
 }

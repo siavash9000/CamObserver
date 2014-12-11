@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include "webcamimageprovider.h"
-#include "facerecognizer.h"
+#include "facerecognizerwrapper.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,10 +13,12 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     QObject *root = engine.rootObjects().first();
-    FaceRecognizer recognizer;
-    QObject* button = root->findChild<QObject*>("trainingButton");
-    QObject::connect(button, SIGNAL(startTraining()),&recognizer, SLOT(startTrainingFromWebcam()));
-    QObject::connect(button, SIGNAL(stopTraining()),&recognizer, SLOT(stopTrainingFromWebcam()));
+    FaceRecognizerWrapper recognizer(webCamWrapper);
+    QObject* trainingButton = root->findChild<QObject*>("trainingButton");
+    QObject* predictionButton = root->findChild<QObject*>("predictionButton");
+    QObject::connect(trainingButton, SIGNAL(startTraining()),&recognizer, SLOT(startTrainingFromWebcam()));
+    QObject::connect(trainingButton, SIGNAL(stopTraining()),&recognizer, SLOT(stopTrainingFromWebcam()));
+    QObject::connect(predictionButton, SIGNAL(predict()),&recognizer, SLOT(predictFromWebcam()));
 
     return app.exec();
 }

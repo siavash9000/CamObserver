@@ -4,13 +4,13 @@
 #include <opencv/highgui.h>
 #include <QPixmap>
 #include <QDebug>
-#include <opencv/cv.h>
 
 class WebCamWrapper
 {
 public:
     WebCamWrapper();
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
+    IplImage* takeWebcamShot();
 private:
     CvCapture* m_camera;
     QImage m_image;

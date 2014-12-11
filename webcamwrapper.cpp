@@ -10,9 +10,15 @@ WebCamWrapper::WebCamWrapper()
     objectCount++;
 }
 
-QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+IplImage* WebCamWrapper::takeWebcamShot()
 {
     m_openCV_image = cvQueryFrame(m_camera);
+    return m_openCV_image;
+}
+
+QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+{
+    takeWebcamShot();
     int cvIndex, cvLineStart;
 
     switch (m_openCV_image->depth) {
