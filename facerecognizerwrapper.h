@@ -7,11 +7,11 @@
 #include "opencv2/core/core.hpp"
 #include "opencv2/face/facerec.hpp"
 #include "opencv2/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
 
 using namespace cv;
 using namespace cv::face;
 using namespace std;
-
 
 class FaceRecognizerWrapper : public QObject
 {
@@ -24,11 +24,16 @@ private:
     vector<int> labels;
     QTimer *timer;
     Mat convertIplImageToMatrix(IplImage* iplImage);
-public slots:
+    Ptr<FaceRecognizer> model;
+public
+slots:
     void doTraining();
     void startTrainingFromWebcam();
     void stopTrainingFromWebcam();
     void predictFromWebcam();
+signals:
+    void foundPrediction(std::string prediction);
+
 };
 
 #endif // FACERECOGNIZER_H

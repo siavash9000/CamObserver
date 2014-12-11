@@ -8,11 +8,13 @@ void FaceRecognizerWrapper::startTrainingFromWebcam() {
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(doTraining()));
     timer->start(500);
-    Ptr<FaceRecognizer> model =  createEigenFaceRecognizer();
+    model =  createLBPHFaceRecognizer();
     Mat mat = convertIplImageToMatrix(webCamWrapper.takeWebcamShot());
+    Mat gray;
+    cv::cvtColor(mat, gray, CV_BGR2GRAY);
     vector<Mat> images;
     vector<int> labels;
-    images.push_back(mat);
+    images.push_back(gray);
     labels.push_back(0);
     model->train(images, labels);
 }
@@ -25,10 +27,13 @@ cv::Mat FaceRecognizerWrapper::convertIplImageToMatrix(IplImage* iplImage)
 void FaceRecognizerWrapper::doTraining(){
     qDebug() << "training iteration";
     Mat mat = convertIplImageToMatrix(webCamWrapper.takeWebcamShot());
+    Mat gray;
+    cv::cvtColor(mat, gray, CV_BGR2GRAY);
     vector<Mat> images;
     vector<int> labels;
-    images.push_back(mat);
+    images.push_back(gray);
     labels.push_back(0);
+    model->train(images, labels);
 }
 
 void FaceRecognizerWrapper::stopTrainingFromWebcam() {
@@ -38,5 +43,11 @@ void FaceRecognizerWrapper::stopTrainingFromWebcam() {
 
 void FaceRecognizerWrapper::predictFromWebcam() {
     qDebug() << "Trying to predict face from current webcam";
-}
+    Mat mat = convertIplImageToMatrix(webCamWrapper.takeWebcamShot());
+    Mat gray;
+    cv::cvtColor(mat, gray, CV_BGR2GRAY);
+    int prediction = model->predict(gray);
 
+    qDebug() << "Prediction:";
+    qDebug() << prediction;
+}

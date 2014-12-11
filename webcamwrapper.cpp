@@ -1,12 +1,15 @@
 #include "webcamwrapper.h"
 int WebCamWrapper::objectCount = 0;
 
-WebCamWrapper::WebCamWrapper()
+WebCamWrapper::WebCamWrapper(FaceDetectionVisualizer visualizer)
 {
+    visualizeFaceShapes = false;
     m_camera = cvCaptureFromCAM(CV_CAP_ANY);
     assert(m_camera);
     m_openCV_image = cvQueryFrame(m_camera);
     assert(m_openCV_image);
+    m_visualizer = visualizer;
+    lastFaceShapeDetection = clock();
     objectCount++;
 }
 
@@ -16,9 +19,17 @@ IplImage* WebCamWrapper::takeWebcamShot()
     return m_openCV_image;
 }
 
-QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+void WebCamWrapper::addFaceRectangleToImage(std::vector<cv::Rect_<int> > faces,cv::Mat image)
 {
-    takeWebcamShot();
+    for(int i = 0; i < faces.size(); i++) {
+        cv::Rect face_i = faces[i];
+        cv::rectangle(image, face_i, CV_RGB(0, 255,0), 1);
+    }
+    m_openCV_image = new IplImage(image);
+}
+
+void WebCamWrapper::convertToQImage()
+{
     int cvIndex, cvLineStart;
 
     switch (m_openCV_image->depth) {
@@ -53,6 +64,26 @@ QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize
         qWarning("This type of IplImage is not implemented in QOpenCVWidget\n");
         break;
     }
+}
+
+QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+{
+    takeWebcamShot();
+    clock_t now = clock();
+    double diff = double(now - lastFaceShapeDetection) / CLOCKS_PER_SEC;
+
+    cv::Mat image = cv::cvarrToMat(m_openCV_image);
+    if (visualizeFaceShapes && diff>0.1) {
+        faces = m_visualizer.detectFaceRectangle(image);
+        lastFaceShapeDetection = clock();
+    }
+    addFaceRectangleToImage(faces,image);
+
+    convertToQImage();
 
     return QPixmap::fromImage(m_image);
+}
+
+void WebCamWrapper::onToggleVisualization(){
+    visualizeFaceShapes = !visualizeFaceShapes;
 }

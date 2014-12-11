@@ -29,7 +29,7 @@ ApplicationWindow {
         objectName: "trainingButton"
         anchors.left: camera.right
         property var isCurrentlyTraining: false
-        width: 100
+        width: 150
         height: 100
         text: "Start Training"
         signal startTraining()
@@ -52,11 +52,34 @@ ApplicationWindow {
         objectName: "predictionButton"
         anchors.left: camera.right
         anchors.top: trainingButton.bottom
-        width: 100
+        width: 150
         height: 100
         text: "Predict"
         signal predict()
         onClicked:
             predictionButton.predict()
+    }
+
+    TextField {
+        id: interactionField
+        objectName: "interactionField"
+        anchors.left: camera.right
+        anchors.top: predictionButton.bottom
+        width: 150
+        height: 100
+        placeholderText: qsTr("Enter name")
+    }
+
+    Button {
+        id: faceShapeButton
+        objectName: "faceShapeButton"
+        anchors.left: camera.right
+        anchors.top: interactionField.bottom
+        width: 150
+        height: 100
+        text: "Show Face Shapes"
+        signal toggleVisualization()
+        onClicked:
+            faceShapeButton.toggleVisualization()
     }
 }
