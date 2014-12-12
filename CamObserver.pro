@@ -6,7 +6,8 @@ SOURCES += main.cpp \
     webcamimageprovider.cpp \
     webcamwrapper.cpp \
     facerecognizerwrapper.cpp \
-    facedetectionvisualizer.cpp
+    facedetectionvisualizer.cpp \
+    soundthread.cpp
 
 RESOURCES += qml.qrc
 
@@ -20,6 +21,12 @@ HEADERS += \
     webcamimageprovider.h \
     webcamwrapper.h \
     facerecognizerwrapper.h \
-    facedetectionvisualizer.h
+    facedetectionvisualizer.h \
+    soundthread.h
+
+CONFIG += c++11
+
 unix: CONFIG += link_pkgconfig
 unix: PKGCONFIG += opencv
+
+LIBS += -L$ESPEAK_HOME -lespeak
