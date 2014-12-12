@@ -1,17 +1,18 @@
 #ifndef SOUNDTHREAD_H
 #define SOUNDTHREAD_H
 
-#include <QRunnable>
 #include <espeak/speak_lib.h>
 #include <QDebug>
 #include <QEventLoop>
 #include <QTimer>
 
-class SoundThread  : public QRunnable
+class SpeechSynthesizer  : public QObject
 {
+    Q_OBJECT
 public:
-    SoundThread();
-    void run();
+    SpeechSynthesizer();
+public slots:
+    void onSay(std::string message);
 };
 
 #endif // SOUNDTHREAD_H

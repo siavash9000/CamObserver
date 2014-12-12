@@ -7,7 +7,7 @@ SOURCES += main.cpp \
     webcamwrapper.cpp \
     facerecognizerwrapper.cpp \
     facedetectionvisualizer.cpp \
-    soundthread.cpp
+    speechsynthesizer.cpp
 
 RESOURCES += qml.qrc
 
@@ -22,7 +22,7 @@ HEADERS += \
     webcamwrapper.h \
     facerecognizerwrapper.h \
     facedetectionvisualizer.h \
-    soundthread.h
+    speechsynthesizer.h
 
 CONFIG += c++11
 

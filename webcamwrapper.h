@@ -5,8 +5,9 @@
 #include <QPixmap>
 #include <QDebug>
 #include "facedetectionvisualizer.h"
-#include "soundthread.h"
+#include "speechsynthesizer.h"
 #include <QThreadPool>
+
 
 class WebCamWrapper: public QObject{
 Q_OBJECT
@@ -20,6 +21,8 @@ public:
     void synthesizeSound();
 public slots:
     void onToggleVisualization();
+signals:
+    void say(std::string message);
 private:
     CvCapture* m_camera;
     QImage m_image;
@@ -29,8 +32,8 @@ private:
     clock_t lastFaceShapeDetection;
     std::vector<cv::Rect_<int> > faces;
     bool visualizeFaceShapes;
-    QThreadPool *threadPool;
-    SoundThread sound;
+    SpeechSynthesizer speech;
+    QThread soundThread;
 };
 
 #endif // OPENCVQTCONVERTER_H

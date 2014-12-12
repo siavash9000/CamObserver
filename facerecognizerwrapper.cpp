@@ -68,4 +68,5 @@ void FaceRecognizerWrapper::predictFromWebcam() {
 
     qDebug() << "Prediction:";
     qDebug() << prediction;
+    qDebug() << "Prediction:";
 }

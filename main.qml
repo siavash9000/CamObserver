@@ -28,23 +28,13 @@ ApplicationWindow {
         id: trainingButton
         objectName: "trainingButton"
         anchors.left: camera.right
-        property var isCurrentlyTraining: false
         width: 150
         height: 100
         text: "Start Training"
         signal startTraining()
         signal stopTraining()
         onClicked:
-            if (isCurrentlyTraining){
-                trainingButton.text="Stop Training"
-                trainingButton.stopTraining()
-                isCurrentlyTraining=false
-            }
-            else {
-                trainingButton.text="Start Training"
-                trainingButton.startTraining()
-                isCurrentlyTraining=true
-            }
+            trainingButton.startTraining()
     }
 
     Button {

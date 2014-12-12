@@ -1,15 +1,16 @@
-#include "soundthread.h"
+#include "speechsynthesizer.h"
 
-SoundThread::SoundThread()
+SpeechSynthesizer::SpeechSynthesizer()
 {
+    qDebug() << "SpeechSynthesizer created";
 }
 
-void SoundThread::run()
+void SpeechSynthesizer::onSay(std::string message)
 {
+    qDebug() << "onSay triggered";
     QEventLoop loop;
     QTimer::singleShot(2500, &loop, SLOT(quit()));
     loop.exec();
-    std::string message = "hello sia";
     espeak_Initialize(
       AUDIO_OUTPUT_PLAYBACK, // plays audio data asynchronously
       500,                   // length of buffers for synth function, in ms

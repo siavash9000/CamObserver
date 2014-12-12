@@ -3,17 +3,17 @@
 #include "webcamimageprovider.h"
 #include "facerecognizerwrapper.h"
 #include "facedetectionvisualizer.h"
+Q_DECLARE_METATYPE (std::string)
 
 int main(int argc, char *argv[])
 {
+    qRegisterMetaType<std::string>("std::string");
     QApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
     FaceDetectionVisualizer visualizer;
     WebCamWrapper webCamWrapper(visualizer);
     engine.addImageProvider(QLatin1String("webcamimageprovider"), new WebcamImageProvider(webCamWrapper));
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-
     QObject *root = engine.rootObjects().first();
     FaceRecognizerWrapper recognizer(webCamWrapper);
     QObject* trainingButton = root->findChild<QObject*>("trainingButton");
@@ -23,8 +23,6 @@ int main(int argc, char *argv[])
     QObject::connect(trainingButton, SIGNAL(stopTraining()),&recognizer, SLOT(stopTrainingFromWebcam()));
     QObject::connect(predictionButton, SIGNAL(predict()),&recognizer, SLOT(predictFromWebcam()));
     QObject::connect(faceShapeButton, SIGNAL(toggleVisualization()),&webCamWrapper, SLOT(onToggleVisualization()));
-
-
 
     return app.exec();
 }

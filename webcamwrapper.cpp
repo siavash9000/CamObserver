@@ -11,8 +11,9 @@ WebCamWrapper::WebCamWrapper(FaceDetectionVisualizer visualizer)
     m_visualizer = visualizer;
     lastFaceShapeDetection = clock();
     objectCount++;
-    threadPool = QThreadPool::globalInstance();
-    sound.setAutoDelete(false);
+    speech.moveToThread(&soundThread);
+    QObject::connect(this, SIGNAL(say(std::string)),&speech, SLOT(onSay(std::string)));
+    soundThread.start();
 }
 
 IplImage* WebCamWrapper::takeWebcamShot()
@@ -88,10 +89,12 @@ QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize
 
 void WebCamWrapper::synthesizeSound()
 {
-    threadPool->start(&sound);
+    std::string message("Hello sia");
+    say(message);
 }
 
 void WebCamWrapper::onToggleVisualization(){
+    qDebug() << "toggled visualization";
     visualizeFaceShapes = !visualizeFaceShapes;
     synthesizeSound();
 }
