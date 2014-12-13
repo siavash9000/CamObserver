@@ -2,15 +2,19 @@
 #include <QQmlApplicationEngine>
 #include "webcamimageprovider.h"
 #include "facerecognizerwrapper.h"
-#include "facedetectionvisualizer.h"
+#include "facedetector.h"
 Q_DECLARE_METATYPE (std::string)
+Q_DECLARE_METATYPE (cv::Mat)
+Q_DECLARE_METATYPE (std::vector<cv::Rect_<int> >)
 
 int main(int argc, char *argv[])
 {
+    qRegisterMetaType<std::vector<cv::Rect_<int> >>("std::vector<cv::Rect_<int> >");
+    qRegisterMetaType<cv::Mat>("cv::Mat");
     qRegisterMetaType<std::string>("std::string");
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    FaceDetectionVisualizer visualizer;
+    FaceDetector visualizer;
     WebCamWrapper webCamWrapper(visualizer);
     engine.addImageProvider(QLatin1String("webcamimageprovider"), new WebcamImageProvider(webCamWrapper));
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

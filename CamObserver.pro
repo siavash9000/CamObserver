@@ -6,8 +6,8 @@ SOURCES += main.cpp \
     webcamimageprovider.cpp \
     webcamwrapper.cpp \
     facerecognizerwrapper.cpp \
-    facedetectionvisualizer.cpp \
-    speechsynthesizer.cpp
+    speechsynthesizer.cpp \
+    facedetector.cpp
 
 RESOURCES += qml.qrc
 
@@ -21,8 +21,8 @@ HEADERS += \
     webcamimageprovider.h \
     webcamwrapper.h \
     facerecognizerwrapper.h \
-    facedetectionvisualizer.h \
-    speechsynthesizer.h
+    speechsynthesizer.h \
+    facedetector.h
 
 CONFIG += c++11
 

@@ -1,19 +1,25 @@
 #include "webcamwrapper.h"
+
 int WebCamWrapper::objectCount = 0;
 
-WebCamWrapper::WebCamWrapper(FaceDetectionVisualizer visualizer)
+WebCamWrapper::WebCamWrapper(FaceDetector& visualizer):m_visualizer(visualizer)
 {
     visualizeFaceShapes = false;
     m_camera = cvCaptureFromCAM(CV_CAP_ANY);
     assert(m_camera);
     m_openCV_image = cvQueryFrame(m_camera);
     assert(m_openCV_image);
-    m_visualizer = visualizer;
     lastFaceShapeDetection = clock();
     objectCount++;
     speech.moveToThread(&soundThread);
+    m_visualizer.moveToThread(&facedetectorThread);
     QObject::connect(this, SIGNAL(say(std::string)),&speech, SLOT(onSay(std::string)));
+    QObject::connect(this, SIGNAL(triggerFaceDetection(cv::Mat)),
+                     &m_visualizer, SLOT(detectFaces(cv::Mat)));
+    QObject::connect(&m_visualizer, SIGNAL(faceDetection(std::vector<cv::Rect_<int> > )),
+                     this, SLOT(onFacesDetection(std::vector<cv::Rect_<int> > )));
     soundThread.start();
+    facedetectorThread.start();
 }
 
 IplImage* WebCamWrapper::takeWebcamShot()
@@ -29,6 +35,10 @@ void WebCamWrapper::addFaceRectangleToImage(std::vector<cv::Rect_<int> > faces,c
         cv::rectangle(image, face_i, CV_RGB(0, 255,0), 1);
     }
     m_openCV_image = new IplImage(image);
+}
+
+void WebCamWrapper::onFacesDetection(std::vector<cv::Rect_<int> > faces){
+    this->m_faces = faces;
 }
 
 void WebCamWrapper::convertToQImage()
@@ -76,11 +86,11 @@ QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize
     double diff = double(now - lastFaceShapeDetection) / CLOCKS_PER_SEC;
 
     cv::Mat image = cv::cvarrToMat(m_openCV_image);
-    if (visualizeFaceShapes && diff>0.1) {
-        faces = m_visualizer.detectFaceRectangle(image);
+    if (visualizeFaceShapes && diff>0.05) {
+        emit triggerFaceDetection(image);
         lastFaceShapeDetection = clock();
     }
-    addFaceRectangleToImage(faces,image);
+    addFaceRectangleToImage(m_faces,image);
 
     convertToQImage();
 

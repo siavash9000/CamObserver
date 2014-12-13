@@ -8,11 +8,20 @@
 #include "opencv2/face/facerec.hpp"
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
-class FaceDetectionVisualizer
+#include <QTimer>
+
+class FaceDetector: public QObject
 {
+    Q_OBJECT
 public:
-    FaceDetectionVisualizer();
+    FaceDetector();
     std::vector<cv::Rect_<int> > detectFaceRectangle(cv::Mat& image);
+public  slots:
+    void detectFaces(cv::Mat image);
+signals:
+    void faceDetection(std::vector<cv::Rect_<int> > faces);
+private:
+
 };
 
 #endif // FACEDETECTIONVISUALIZER_H
