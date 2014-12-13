@@ -86,7 +86,7 @@ QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize
     double diff = double(now - lastFaceShapeDetection) / CLOCKS_PER_SEC;
 
     cv::Mat image = cv::cvarrToMat(m_openCV_image);
-    if (visualizeFaceShapes && diff>0.05) {
+    if (visualizeFaceShapes && diff>0.5) {
         emit triggerFaceDetection(image);
         lastFaceShapeDetection = clock();
     }
