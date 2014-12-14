@@ -59,17 +59,4 @@ ApplicationWindow {
         height: 100
         placeholderText: qsTr("Enter name")
     }
-
-    Button {
-        id: faceShapeButton
-        objectName: "faceShapeButton"
-        anchors.left: camera.right
-        anchors.top: interactionField.bottom
-        width: 150
-        height: 100
-        text: "Show Face Shapes"
-        signal toggleVisualization()
-        onClicked:
-            faceShapeButton.toggleVisualization()
-    }
 }

@@ -11,14 +11,25 @@ Brain::Brain(WebCamWrapper& webcam):m_webcam(webcam)
     QObject::connect(&m_faceDetector, SIGNAL(faceDetection(std::vector<cv::Rect_<int> > )),
                      this, SLOT(onFacesDetection(std::vector<cv::Rect_<int> > )));
     facedetectorThread.start();
+
+    speech.moveToThread(&soundThread);
+    QObject::connect(this, SIGNAL(say(std::string)),&speech, SLOT(onSay(std::string)));
+    soundThread.start();
+
+    synthesizeSound();
 }
 
 void Brain::onFacesDetectionUpdate(){
-    qDebug() << "triggered face detection";
     cv::Mat image = m_webcam.getWebcamAsMat();
     emit triggerFaceDetection(image);
 }
 
 void Brain::onFacesDetection(std::vector<cv::Rect_<int> > faces){
     m_webcam.setFaces(faces);
+}
+
+void Brain::synthesizeSound()
+{
+    std::string message("hello user");
+    say(message);
 }

@@ -4,16 +4,11 @@ int WebCamWrapper::objectCount = 0;
 
 WebCamWrapper::WebCamWrapper()
 {
-    visualizeFaceShapes = false;
     m_camera = cvCaptureFromCAM(CV_CAP_ANY);
     assert(m_camera);
     m_openCV_image = cvQueryFrame(m_camera);
     assert(m_openCV_image);
-    lastFaceShapeDetection = clock();
     objectCount++;
-    speech.moveToThread(&soundThread);
-    QObject::connect(this, SIGNAL(say(std::string)),&speech, SLOT(onSay(std::string)));
-    soundThread.start();
 }
 
 IplImage* WebCamWrapper::takeWebcamShot()
@@ -81,29 +76,7 @@ void WebCamWrapper::convertToQImage()
 QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
     takeWebcamShot();
-    clock_t now = clock();
-    double diff = double(now - lastFaceShapeDetection) / CLOCKS_PER_SEC;
-
-    cv::Mat image = getWebcamAsMat();
-    if (visualizeFaceShapes && diff>0.5) {
-       // emit triggerFaceDetection(image);
-       // lastFaceShapeDetection = clock();
-    }
     addFaceRectangleToImage(m_faces);
-
     convertToQImage();
-
     return QPixmap::fromImage(m_image);
-}
-
-void WebCamWrapper::synthesizeSound()
-{
-    std::string message("hello sia, hello marcus");
-    say(message);
-}
-
-void WebCamWrapper::onToggleVisualization(){
-    qDebug() << "toggled visualization";
-    visualizeFaceShapes = !visualizeFaceShapes;
-    synthesizeSound();
 }

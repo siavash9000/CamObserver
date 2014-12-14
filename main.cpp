@@ -24,11 +24,8 @@ int main(int argc, char *argv[])
     FaceRecognizerWrapper recognizer(webCamWrapper);
     QObject* trainingButton = root->findChild<QObject*>("trainingButton");
     QObject* predictionButton = root->findChild<QObject*>("predictionButton");
-    QObject* faceShapeButton = root->findChild<QObject*>("faceShapeButton");
     QObject::connect(trainingButton, SIGNAL(startTraining()),&recognizer, SLOT(startTrainingFromWebcam()));
     QObject::connect(trainingButton, SIGNAL(stopTraining()),&recognizer, SLOT(stopTrainingFromWebcam()));
     QObject::connect(predictionButton, SIGNAL(predict()),&recognizer, SLOT(predictFromWebcam()));
-    QObject::connect(faceShapeButton, SIGNAL(toggleVisualization()),&webCamWrapper, SLOT(onToggleVisualization()));
-
     return app.exec();
 }

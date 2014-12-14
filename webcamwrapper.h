@@ -4,9 +4,9 @@
 #include <opencv/highgui.h>
 #include <QPixmap>
 #include <QDebug>
-#include "facedetector.h"
-#include "speechsynthesizer.h"
 #include <QThread>
+#include "opencv2/imgproc/imgproc.hpp"
+#include "speechsynthesizer.h"
 
 
 class WebCamWrapper: public QObject{
@@ -18,24 +18,14 @@ public:
     IplImage* takeWebcamShot();
     void addFaceRectangleToImage(std::vector<cv::Rect_<int> > faces);
     void convertToQImage();
-    void synthesizeSound();
     cv::Mat getWebcamAsMat();
     void setFaces(std::vector<cv::Rect_<int> > faces);
-public slots:
-    void onToggleVisualization();
-signals:
-    void say(std::string message);
-    void triggerFaceDetection(cv::Mat image);
 private:
     CvCapture* m_camera;
     QImage m_image;
     IplImage *m_openCV_image;
     static int objectCount;
-    clock_t lastFaceShapeDetection;
     std::vector<cv::Rect_<int> > m_faces;
-    bool visualizeFaceShapes;
-    SpeechSynthesizer speech;
-    QThread soundThread;
 };
 
 #endif // OPENCVQTCONVERTER_H

@@ -8,6 +8,7 @@
 #include "opencv2/face/facerec.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/objdetect/objdetect.hpp"
 
 using namespace cv;
 using namespace cv::face;
