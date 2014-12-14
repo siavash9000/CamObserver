@@ -3,6 +3,12 @@
 SpeechSynthesizer::SpeechSynthesizer()
 {
     qDebug() << "SpeechSynthesizer created";
+    espeak_Initialize(
+      AUDIO_OUTPUT_PLAYBACK, // plays audio data asynchronously
+      500,                   // length of buffers for synth function, in ms
+      nullptr,               // dir containing espeak-data, or null for default
+      0);                    // options are mostly for phoneme callbacks, so 0
+
 }
 
 void SpeechSynthesizer::onSay(std::string message)
@@ -11,11 +17,6 @@ void SpeechSynthesizer::onSay(std::string message)
     QEventLoop loop;
     QTimer::singleShot(2500, &loop, SLOT(quit()));
     loop.exec();
-    espeak_Initialize(
-      AUDIO_OUTPUT_PLAYBACK, // plays audio data asynchronously
-      500,                   // length of buffers for synth function, in ms
-      nullptr,               // dir containing espeak-data, or null for default
-      0);                    // options are mostly for phoneme callbacks, so 0
 
     espeak_ERROR err = espeak_Synth(
       message.c_str(),   // text

@@ -13,15 +13,16 @@ class WebCamWrapper: public QObject{
 Q_OBJECT
 
 public:
-    WebCamWrapper(FaceDetector& visualizer);
+    WebCamWrapper();
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
     IplImage* takeWebcamShot();
-    void addFaceRectangleToImage(std::vector<cv::Rect_<int> > faces,cv::Mat image);
+    void addFaceRectangleToImage(std::vector<cv::Rect_<int> > faces);
     void convertToQImage();
     void synthesizeSound();
+    cv::Mat getWebcamAsMat();
+    void setFaces(std::vector<cv::Rect_<int> > faces);
 public slots:
     void onToggleVisualization();
-    void onFacesDetection(std::vector<cv::Rect_<int> > faces);
 signals:
     void say(std::string message);
     void triggerFaceDetection(cv::Mat image);
@@ -30,13 +31,11 @@ private:
     QImage m_image;
     IplImage *m_openCV_image;
     static int objectCount;
-    FaceDetector& m_visualizer;
     clock_t lastFaceShapeDetection;
     std::vector<cv::Rect_<int> > m_faces;
     bool visualizeFaceShapes;
     SpeechSynthesizer speech;
     QThread soundThread;
-    QThread facedetectorThread;
 };
 
 #endif // OPENCVQTCONVERTER_H

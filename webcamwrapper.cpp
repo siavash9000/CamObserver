@@ -2,7 +2,7 @@
 
 int WebCamWrapper::objectCount = 0;
 
-WebCamWrapper::WebCamWrapper(FaceDetector& visualizer):m_visualizer(visualizer)
+WebCamWrapper::WebCamWrapper()
 {
     visualizeFaceShapes = false;
     m_camera = cvCaptureFromCAM(CV_CAP_ANY);
@@ -12,14 +12,8 @@ WebCamWrapper::WebCamWrapper(FaceDetector& visualizer):m_visualizer(visualizer)
     lastFaceShapeDetection = clock();
     objectCount++;
     speech.moveToThread(&soundThread);
-    m_visualizer.moveToThread(&facedetectorThread);
     QObject::connect(this, SIGNAL(say(std::string)),&speech, SLOT(onSay(std::string)));
-    QObject::connect(this, SIGNAL(triggerFaceDetection(cv::Mat)),
-                     &m_visualizer, SLOT(detectFaces(cv::Mat)));
-    QObject::connect(&m_visualizer, SIGNAL(faceDetection(std::vector<cv::Rect_<int> > )),
-                     this, SLOT(onFacesDetection(std::vector<cv::Rect_<int> > )));
     soundThread.start();
-    facedetectorThread.start();
 }
 
 IplImage* WebCamWrapper::takeWebcamShot()
@@ -28,17 +22,22 @@ IplImage* WebCamWrapper::takeWebcamShot()
     return m_openCV_image;
 }
 
-void WebCamWrapper::addFaceRectangleToImage(std::vector<cv::Rect_<int> > faces,cv::Mat image)
+cv::Mat WebCamWrapper::getWebcamAsMat(){
+    cv::Mat image = cv::cvarrToMat(m_openCV_image);
+    return image;
+}
+void WebCamWrapper::setFaces(std::vector<cv::Rect_<int> > faces){
+    m_faces = faces;
+}
+
+void WebCamWrapper::addFaceRectangleToImage(std::vector<cv::Rect_<int> > faces)
 {
+    cv::Mat image = getWebcamAsMat();
     for(int i = 0; i < faces.size(); i++) {
         cv::Rect face_i = faces[i];
         cv::rectangle(image, face_i, CV_RGB(0, 255,0), 1);
     }
     m_openCV_image = new IplImage(image);
-}
-
-void WebCamWrapper::onFacesDetection(std::vector<cv::Rect_<int> > faces){
-    this->m_faces = faces;
 }
 
 void WebCamWrapper::convertToQImage()
@@ -85,12 +84,12 @@ QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize
     clock_t now = clock();
     double diff = double(now - lastFaceShapeDetection) / CLOCKS_PER_SEC;
 
-    cv::Mat image = cv::cvarrToMat(m_openCV_image);
+    cv::Mat image = getWebcamAsMat();
     if (visualizeFaceShapes && diff>0.5) {
-        emit triggerFaceDetection(image);
-        lastFaceShapeDetection = clock();
+       // emit triggerFaceDetection(image);
+       // lastFaceShapeDetection = clock();
     }
-    addFaceRectangleToImage(m_faces,image);
+    addFaceRectangleToImage(m_faces);
 
     convertToQImage();
 
@@ -99,7 +98,7 @@ QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize
 
 void WebCamWrapper::synthesizeSound()
 {
-    std::string message("Hello sia");
+    std::string message("hello sia, hello marcus");
     say(message);
 }
 
