@@ -16,7 +16,7 @@ public:
     WebCamWrapper();
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
     IplImage* takeWebcamShot();
-    void addFaceRectangleToImage(std::vector<cv::Rect_<int> > faces);
+    void addFaceRectangleToImage();
     void convertToQImage();
     cv::Mat getWebcamAsMat();
     void setFaces(std::vector<cv::Rect_<int> > faces);

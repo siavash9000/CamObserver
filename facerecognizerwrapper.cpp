@@ -7,9 +7,6 @@ FaceRecognizerWrapper::FaceRecognizerWrapper(WebCamWrapper& webCam):webCamWrappe
 
 void FaceRecognizerWrapper::startTrainingFromWebcam() {
     qDebug() << "Starting the training with opencv " << CV_MAJOR_VERSION <<'.'<< CV_MINOR_VERSION;
-    //timer = new QTimer(this);
-    //connect(timer, SIGNAL(timeout()), this, SLOT(doTraining()));
-    //timer->start(500);
     model =  createLBPHFaceRecognizer();
     Mat mat = convertIplImageToMatrix(webCamWrapper.takeWebcamShot());
     cv::CascadeClassifier haar_cascade;
@@ -47,8 +44,6 @@ void FaceRecognizerWrapper::predictFromWebcam() {
     haar_cascade.detectMultiScale(gray, faces);
     Mat face = gray(faces[0]);
     int prediction = model->predict(face);
-
     qDebug() << "Prediction:";
     qDebug() << prediction;
-    qDebug() << "Prediction:";
 }

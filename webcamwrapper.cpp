@@ -25,11 +25,11 @@ void WebCamWrapper::setFaces(std::vector<cv::Rect_<int> > faces){
     m_faces = faces;
 }
 
-void WebCamWrapper::addFaceRectangleToImage(std::vector<cv::Rect_<int> > faces)
+void WebCamWrapper::addFaceRectangleToImage()
 {
     cv::Mat image = getWebcamAsMat();
-    for(int i = 0; i < faces.size(); i++) {
-        cv::Rect face_i = faces[i];
+    for(int i = 0; i < m_faces.size(); i++) {
+        cv::Rect face_i = m_faces[i];
         cv::rectangle(image, face_i, CV_RGB(0, 255,0), 1);
     }
     m_openCV_image = new IplImage(image);
@@ -76,7 +76,7 @@ void WebCamWrapper::convertToQImage()
 QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
     takeWebcamShot();
-    addFaceRectangleToImage(m_faces);
+    addFaceRectangleToImage();
     convertToQImage();
     return QPixmap::fromImage(m_image);
 }
