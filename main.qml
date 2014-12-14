@@ -30,11 +30,10 @@ ApplicationWindow {
         anchors.left: camera.right
         width: 150
         height: 100
-        text: "Start Training"
-        signal startTraining()
-        signal stopTraining()
+        text: "Train"
+        signal train()
         onClicked:
-            trainingButton.startTraining()
+            trainingButton.train()
     }
 
     Button {

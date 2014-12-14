@@ -29,9 +29,7 @@ private:
     int label;
 public
 slots:
-    void doTraining();
     void startTrainingFromWebcam();
-    void stopTrainingFromWebcam();
     void predictFromWebcam();
 signals:
     void foundPrediction(std::string prediction);

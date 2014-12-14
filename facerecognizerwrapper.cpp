@@ -36,24 +36,6 @@ cv::Mat FaceRecognizerWrapper::convertIplImageToMatrix(IplImage* iplImage)
     return cv::cvarrToMat(iplImage);
 }
 
-void FaceRecognizerWrapper::doTraining(){
-    qDebug() << "training iteration";
-    Mat mat = convertIplImageToMatrix(webCamWrapper.takeWebcamShot());
-    Mat gray;
-    cv::cvtColor(mat, gray, CV_BGR2GRAY);
-    vector<Mat> images;
-    vector<int> labels;
-    images.push_back(gray);
-    labels.push_back(label);
-    label++;
-    model->train(images, labels);
-}
-
-void FaceRecognizerWrapper::stopTrainingFromWebcam() {
-    qDebug() << "Stoping the training";
-    //timer->stop();
-}
-
 void FaceRecognizerWrapper::predictFromWebcam() {
     qDebug() << "Trying to predict face from current webcam";
     Mat mat = convertIplImageToMatrix(webCamWrapper.takeWebcamShot());
