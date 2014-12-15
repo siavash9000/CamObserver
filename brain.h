@@ -5,14 +5,17 @@
 #include "facedetector.h"
 #include "webcamwrapper.h"
 #include "speechsynthesizer.h"
+#include <QDate>
+using namespace std;
 
 class Brain: public QObject
 {
     Q_OBJECT
 public:
     Brain(WebCamWrapper& webcam);
+    void think();
 public slots:
-    void onFacesDetection(std::vector<cv::Rect_<int> > faces);
+    void onFacesDetection(vector<cv::Rect_<int> > faces);
     void onFacesDetectionUpdate();
 signals:
     void triggerFaceDetection(cv::Mat image);

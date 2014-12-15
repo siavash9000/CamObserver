@@ -5,7 +5,6 @@ QT += qml quick widgets
 SOURCES += main.cpp \
     webcamimageprovider.cpp \
     webcamwrapper.cpp \
-    facerecognizerwrapper.cpp \
     speechsynthesizer.cpp \
     facedetector.cpp \
     brain.cpp
@@ -21,7 +20,6 @@ include(deployment.pri)
 HEADERS += \
     webcamimageprovider.h \
     webcamwrapper.h \
-    facerecognizerwrapper.h \
     speechsynthesizer.h \
     facedetector.h \
     brain.h

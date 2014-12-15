@@ -24,38 +24,12 @@ ApplicationWindow {
         onTriggered: camera.reload()
     }
 
-    Button {
-        id: trainingButton
-        objectName: "trainingButton"
-        anchors.left: camera.right
-        width: 150
-        height: 100
-        text: "Train"
-        signal train()
-        onClicked:
-            trainingButton.train()
-    }
-
-    Button {
-        id: predictionButton
-        objectName: "predictionButton"
-        anchors.left: camera.right
-        anchors.top: trainingButton.bottom
-        width: 150
-        height: 100
-        text: "Predict"
-        signal predict()
-        onClicked:
-            predictionButton.predict()
-    }
-
     TextField {
         id: interactionField
         objectName: "interactionField"
         anchors.left: camera.right
-        anchors.top: predictionButton.bottom
-        width: 150
-        height: 100
+        width: 160
+        height: 480
         placeholderText: qsTr("Enter name")
     }
 }
