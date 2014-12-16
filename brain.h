@@ -15,7 +15,7 @@ public:
     Brain(WebCamWrapper& webcam);
     void think();
 public slots:
-    void onFacesDetection(vector<cv::Rect_<int> > faces);
+    void onFacesDetection(vector<cv::Rect_<int> > faces,vector<string> text);
     void onFacesDetectionUpdate();
 signals:
     void triggerFaceDetection(cv::Mat image);

@@ -19,13 +19,14 @@ public:
     void addFaceRectangleToImage();
     void convertToQImage();
     cv::Mat getWebcamAsMat();
-    void setFaces(std::vector<cv::Rect_<int> > faces);
+    void setFaces(std::vector<cv::Rect_<int> > faces,std::vector<std::string> text);
 private:
     CvCapture* m_camera;
     QImage m_image;
     IplImage *m_openCV_image;
     static int objectCount;
     std::vector<cv::Rect_<int> > m_faces;
+    std::vector<std::string> m_text;
 };
 
 #endif // OPENCVQTCONVERTER_H
