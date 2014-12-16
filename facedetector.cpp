@@ -33,31 +33,33 @@ std::tuple<vector< cv::Rect_<int> >,vector<prediction>> FaceDetector::detectFace
     cv::cvtColor(image, gray, CV_BGR2GRAY);
     m_haar_cascade_frontalface.detectMultiScale(gray, faces);
     vector<prediction> predictions;
-    if (m_labels.size()==0){
-        trainFace(faces);
+    if (m_labels.size()==0 && faces.size()>0){
+        trainFace(faces[0]);
     }
     else{
         predictions = predictFromWebcam(faces);
+        for (size_t i=0;i<faces.size();i++){
+            if (predictions[i].confidence > 60) {
+                trainFace(faces[i]);
+            }
+        }
     }
     return make_tuple(faces,predictions);
 }
 
-void FaceDetector::trainFace(vector<cv::Rect_<int> > faces) {
+void FaceDetector::trainFace(cv::Rect_<int> faceRectangle ) {
     qDebug() << "Starting the training with opencv " << CV_MAJOR_VERSION <<'.'<< CV_MINOR_VERSION;
     Mat mat = webCamWrapper.getWebcamAsMat();
     Mat gray;
     cv::cvtColor(mat, gray, CV_BGR2GRAY);
-    for (cv::Rect_<int> current: faces){
-        Mat face = gray(current);
-        vector<Mat> images;
-        images.push_back(face);
-        m_labels.push_back(m_labels.size()+1);
-        if (m_labels.size()==1){
-            model->train(images, m_labels);
-        }
-        else {
-            model->update(images, m_labels);
-        }
+    Mat face = gray(faceRectangle);
+    m_images.push_back(face);
+    m_labels.push_back(m_labels.size()+1);
+    if (m_labels.size()==1){
+        model->train(m_images, m_labels);
+    }
+    else {
+        model->update(m_images, m_labels);
     }
 }
 

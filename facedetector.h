@@ -33,11 +33,12 @@ signals:
 private:
      cv::CascadeClassifier m_haar_cascade_frontalface;
      cv::CascadeClassifier m_haar_cascade_alternative;
+     vector<Mat> m_images;
      vector<int> m_labels;
      Ptr<face::FaceRecognizer> model;
      WebCamWrapper& webCamWrapper;
      std::tuple<vector< cv::Rect_<int> >,vector<prediction>>  detectFaceRectangle(cv::Mat& image);
-     void trainFace(vector<cv::Rect_<int> > faces);
+     void trainFace(cv::Rect_<int> face);
      vector<prediction> predictFromWebcam(vector<cv::Rect_<int> > faces);
 };
 
