@@ -1,4 +1,5 @@
 #include "speechsynthesizer.h"
+namespace camobserver {
 
 SpeechSynthesizer::SpeechSynthesizer()
 {
@@ -34,4 +35,6 @@ void SpeechSynthesizer::onSay(std::string message)
 
     // Wait until everything has been spoken
     espeak_Synchronize();
+}
+
 }

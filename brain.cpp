@@ -1,4 +1,5 @@
 #include "brain.h"
+namespace camobserver {
 
 Brain::Brain(WebCamWrapper& webcam):m_webcam(webcam),m_faceDetector(m_webcam)
 {
@@ -33,4 +34,6 @@ void Brain::synthesizeSound()
 {
     std::string message("hello user");
     emit say(message);
+}
+
 }

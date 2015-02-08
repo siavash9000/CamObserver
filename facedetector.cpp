@@ -1,9 +1,10 @@
 #include "facedetector.h"
-FaceDetector::FaceDetector(WebCamWrapper& cam):webCamWrapper(cam)
+namespace camobserver {
+
+FaceDetector::FaceDetector(WebCamWrapper& cam):m_webCamWrapper(cam),m_recognizer(cam)
 {
     m_haar_cascade_frontalface.load("haarcascades/haarcascade_frontalface_alt.xml");
     m_haar_cascade_alternative.load("haarcascades/haarcascade_frontalface_alt_tree.xml");
-    model =  createLBPHFaceRecognizer();
 }
 
 void FaceDetector::detectFaces(cv::Mat image){
@@ -33,50 +34,15 @@ std::tuple<vector< cv::Rect_<int> >,vector<prediction>> FaceDetector::detectFace
     cv::cvtColor(image, gray, CV_BGR2GRAY);
     m_haar_cascade_frontalface.detectMultiScale(gray, faces);
     vector<prediction> predictions;
-    if (m_labels.size()==0 && faces.size()>0){
-        trainFace(faces[0]);
-    }
-    else{
-        predictions = predictFromWebcam(faces);
-        for (size_t i=0;i<faces.size();i++){
-            if (predictions[i].confidence > 60) {
-                trainFace(faces[i]);
-            }
+    if (faces.size()>0){
+        if (m_recognizer.m_labels.size()==0){
+            m_recognizer.trainFace(faces[0]);
+        }
+        else{
+            predictions = m_recognizer.predictFromWebcam(faces);
         }
     }
     return make_tuple(faces,predictions);
 }
 
-void FaceDetector::trainFace(cv::Rect_<int> faceRectangle ) {
-    qDebug() << "Starting the training with opencv " << CV_MAJOR_VERSION <<'.'<< CV_MINOR_VERSION;
-    Mat mat = webCamWrapper.getWebcamAsMat();
-    Mat gray;
-    cv::cvtColor(mat, gray, CV_BGR2GRAY);
-    Mat face = gray(faceRectangle);
-    m_images.push_back(face);
-    m_labels.push_back(m_labels.size()+1);
-    if (m_labels.size()==1){
-        model->train(m_images, m_labels);
-    }
-    else {
-        model->update(m_images, m_labels);
-    }
-}
-
-vector<prediction> FaceDetector::predictFromWebcam(vector<cv::Rect_<int> > faces) {
-    Mat mat = webCamWrapper.getWebcamAsMat();
-    Mat gray;
-    cv::cvtColor(mat, gray, CV_BGR2GRAY);
-    vector<prediction> result;
-    for (cv::Rect_<int> current: faces){
-        Mat face = gray(current);
-        int label;
-        double confidence;
-        model->predict(face,label,confidence);
-        prediction pred;
-        pred.label = label;
-        pred.confidence = confidence;
-        result.push_back(pred);
-    }
-    return result;
 }

@@ -7,6 +7,8 @@ Q_DECLARE_METATYPE (std::string)
 Q_DECLARE_METATYPE (cv::Mat)
 Q_DECLARE_METATYPE (std::vector<cv::Rect_<int> >)
 
+using namespace camobserver;
+
 int main(int argc, char *argv[])
 {
     qRegisterMetaType<vector<cv::Rect_<int> >>("vector<cv::Rect_<int> >");
@@ -18,6 +20,7 @@ int main(int argc, char *argv[])
     WebCamWrapper webCamWrapper;
     engine.addImageProvider(QLatin1String("webcamimageprovider"), new WebcamImageProvider(webCamWrapper));
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    qDebug() << "Starting CamObserver with opencv " << CV_MAJOR_VERSION <<'.'<< CV_MINOR_VERSION;
     Brain brain(webCamWrapper);
     brain.think();
     return app.exec();

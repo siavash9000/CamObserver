@@ -7,6 +7,7 @@
 #include "speechsynthesizer.h"
 #include <QDate>
 using namespace std;
+namespace camobserver{
 
 class Brain: public QObject
 {
@@ -28,5 +29,5 @@ private:
     SpeechSynthesizer speech;
     QThread soundThread;
 };
-
+}
 #endif // BRAIN_H

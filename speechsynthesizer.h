@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QEventLoop>
 #include <QTimer>
+namespace camobserver {
 
 class SpeechSynthesizer  : public QObject
 {
@@ -15,4 +16,5 @@ public slots:
     void onSay(std::string message);
 };
 
+}
 #endif // SOUNDTHREAD_H

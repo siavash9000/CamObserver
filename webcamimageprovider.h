@@ -4,6 +4,8 @@
 #include <QQuickImageProvider>
 #include "webcamwrapper.h"
 
+namespace camobserver {
+
 class WebcamImageProvider : public QQuickImageProvider
 {
 public:
@@ -13,4 +15,6 @@ private:
     WebCamWrapper& webCamWrapper;
 
 };
+
+}
 #endif // WEBCAMIMAGEPROVIDER_H

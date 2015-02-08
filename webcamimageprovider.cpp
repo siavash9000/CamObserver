@@ -1,4 +1,5 @@
 #include "webcamimageprovider.h"
+namespace camobserver {
 
 WebcamImageProvider::WebcamImageProvider(WebCamWrapper& webCam)
     : QQuickImageProvider(QQuickImageProvider::Pixmap),webCamWrapper(webCam)
@@ -7,4 +8,6 @@ WebcamImageProvider::WebcamImageProvider(WebCamWrapper& webCam)
 QPixmap WebcamImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
    return webCamWrapper.requestPixmap(id,size,requestedSize);
+}
+
 }

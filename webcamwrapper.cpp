@@ -1,4 +1,5 @@
 #include "webcamwrapper.h"
+namespace camobserver {
 
 int WebCamWrapper::objectCount = 0;
 
@@ -84,4 +85,6 @@ QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize
     addFaceRectangleToImage();
     convertToQImage();
     return QPixmap::fromImage(m_image);
+}
+
 }

@@ -3,7 +3,7 @@
 
 #include "webcamwrapper.h"
 #include "opencv2/core/core.hpp"
-#include "opencv2/face/facerec.hpp"
+#include "opencv2/contrib/contrib.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
@@ -11,15 +11,16 @@
 #include <QObject>
 #include <QDebug>
 #include <QTime>
+#include "opencv2/core/core.hpp"
+#include "opencv2/contrib/contrib.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/objdetect/objdetect.hpp"
+#include "facerecognizer.h"
 
 using namespace std;
 using namespace cv;
-using namespace cv::face;
-
-struct prediction {
-  int   label;
-  double confidence;
-};
+namespace camobserver {
 
 class FaceDetector: public QObject
 {
@@ -31,15 +32,11 @@ public  slots:
 signals:
     void faceDetection(vector<cv::Rect_<int> > faces, vector<string> visualizationText);
 private:
+     FaceRecognizer m_recognizer;
      cv::CascadeClassifier m_haar_cascade_frontalface;
      cv::CascadeClassifier m_haar_cascade_alternative;
-     vector<Mat> m_images;
-     vector<int> m_labels;
-     Ptr<face::FaceRecognizer> model;
-     WebCamWrapper& webCamWrapper;
+     WebCamWrapper& m_webCamWrapper;
      std::tuple<vector< cv::Rect_<int> >,vector<prediction>>  detectFaceRectangle(cv::Mat& image);
-     void trainFace(cv::Rect_<int> face);
-     vector<prediction> predictFromWebcam(vector<cv::Rect_<int> > faces);
 };
-
+}
 #endif // FACEDETECTIONVISUALIZER_H

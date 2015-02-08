@@ -8,6 +8,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "speechsynthesizer.h"
 
+namespace camobserver{
 
 class WebCamWrapper: public QObject{
 Q_OBJECT
@@ -29,4 +30,5 @@ private:
     std::vector<std::string> m_text;
 };
 
+}
 #endif // OPENCVQTCONVERTER_H
