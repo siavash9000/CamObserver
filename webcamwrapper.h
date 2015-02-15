@@ -7,6 +7,7 @@
 #include <QThread>
 #include "opencv2/imgproc/imgproc.hpp"
 #include "speechsynthesizer.h"
+#include <boost/circular_buffer.hpp>
 
 namespace camobserver{
 
@@ -20,7 +21,9 @@ public:
     void addFaceRectangleToImage();
     void convertToQImage();
     cv::Mat getWebcamAsMat();
-    void setFaces(std::vector<cv::Rect_<int> > faces,std::vector<std::string> text);
+    void setFaces(std::vector<cv::Rect_<int> > faces,
+                  std::vector<std::string> text,
+                  std::vector<cv::Point> facePoints);
 private:
     CvCapture* m_camera;
     QImage m_image;
@@ -28,6 +31,7 @@ private:
     static int objectCount;
     std::vector<cv::Rect_<int> > m_faces;
     std::vector<std::string> m_text;
+    std::vector<cv::Point> m_points;
 };
 
 }

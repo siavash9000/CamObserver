@@ -22,9 +22,12 @@ cv::Mat WebCamWrapper::getWebcamAsMat(){
     cv::Mat image = cv::cvarrToMat(m_openCV_image);
     return image;
 }
-void WebCamWrapper::setFaces(std::vector<cv::Rect_<int> > faces,std::vector<std::string> text){
+void WebCamWrapper::setFaces(std::vector<cv::Rect_<int> > faces,
+                             std::vector<std::string> text,
+                             std::vector<cv::Point> facePoints){
     m_faces = faces;
     m_text = text;
+    m_points = facePoints;
 }
 
 void WebCamWrapper::addFaceRectangleToImage()
@@ -33,11 +36,15 @@ void WebCamWrapper::addFaceRectangleToImage()
     for(int i = 0; i < m_faces.size(); i++) {
         cv::Rect face_i = m_faces[i];
         cv::rectangle(image, face_i, CV_RGB(0, 255,0), 1);
-        std::string box_text = m_text[i];
+        std::string box_text = "";
+        if (i<m_text.size())
+            box_text = m_text[i];
         int pos_x = std::max(face_i.tl().x - 10, 0);
         int pos_y = std::max(face_i.tl().y - 10, 0);
         cv::putText(image, box_text, cv::Point(pos_x, pos_y), cv::FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0,255,0), 2.0);
     }
+    if (m_points.size()>3)
+       cv::polylines(image,m_points,false,cv::Scalar( 255, 0, 0 ));
     m_openCV_image = new IplImage(image);
 }
 

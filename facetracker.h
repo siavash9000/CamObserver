@@ -17,26 +17,31 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
 #include "facerecognizer.h"
+#include <boost/circular_buffer.hpp>
 
 using namespace std;
 using namespace cv;
 namespace camobserver {
 
-class FaceDetector: public QObject
+class FaceTracker: public QObject
 {
     Q_OBJECT
 public:
-    FaceDetector(WebCamWrapper& cam);
+    FaceTracker(WebCamWrapper& cam);
 public  slots:
     void detectFaces(cv::Mat image);
 signals:
-    void faceDetection(vector<cv::Rect_<int> > faces, vector<string> visualizationText);
+    void faceDetection(vector<cv::Rect_<int> > faces,
+                       vector<string> visualizationText,
+                       std::vector<cv::Point> facePoints);
+
 private:
      FaceRecognizer m_recognizer;
      cv::CascadeClassifier m_haar_cascade_frontalface;
      cv::CascadeClassifier m_haar_cascade_alternative;
      WebCamWrapper& m_webCamWrapper;
-     std::tuple<vector< cv::Rect_<int> >,vector<prediction>>  detectFaceRectangle(cv::Mat& image);
+     vector< cv::Rect_<int> >  detectFaceRectangle(cv::Mat& image);
+     std::vector<cv::Point> facePositions;
 };
 }
 #endif // FACEDETECTIONVISUALIZER_H

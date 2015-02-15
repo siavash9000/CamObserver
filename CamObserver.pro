@@ -6,9 +6,9 @@ SOURCES += main.cpp \
     webcamimageprovider.cpp \
     webcamwrapper.cpp \
     speechsynthesizer.cpp \
-    facedetector.cpp \
     brain.cpp \
-    facerecognizer.cpp
+    facerecognizer.cpp \
+    facetracker.cpp
 
 RESOURCES += qml.qrc
 
@@ -22,9 +22,9 @@ HEADERS += \
     webcamimageprovider.h \
     webcamwrapper.h \
     speechsynthesizer.h \
-    facedetector.h \
     brain.h \
-    facerecognizer.h
+    facerecognizer.h \
+    facetracker.h
 
 CONFIG += c++11
 
@@ -32,3 +32,5 @@ CONFIG += link_pkgconfig
 PKGCONFIG += opencv
 
 LIBS += -L$ESPEAK_HOME -lespeak
+LIBS += \
+       -lboost_system\
