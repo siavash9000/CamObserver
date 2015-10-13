@@ -4,7 +4,7 @@ import QtQuick.Controls 1.2
 ApplicationWindow {
     visible: true
     width: 800
-    height: 480
+    height: 800
     title: qsTr("WebCamObserver")
 
     Image {
@@ -22,14 +22,5 @@ ApplicationWindow {
         id: camtimer
         interval: 40; running: true; repeat: true
         onTriggered: camera.reload()
-    }
-
-    TextField {
-        id: interactionField
-        objectName: "interactionField"
-        anchors.left: camera.right
-        width: 160
-        height: 480
-        placeholderText: qsTr("Enter name")
     }
 }

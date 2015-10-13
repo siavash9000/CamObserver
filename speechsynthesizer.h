@@ -1,7 +1,7 @@
 #ifndef SOUNDTHREAD_H
 #define SOUNDTHREAD_H
 
-#include <espeak/speak_lib.h>
+//#include <espeak/speak_lib.h>
 #include <QDebug>
 #include <QEventLoop>
 #include <QTimer>

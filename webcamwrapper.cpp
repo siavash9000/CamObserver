@@ -1,25 +1,48 @@
 #include "webcamwrapper.h"
+#include "opencv_tools.h"
+#include <QCameraInfo>
+#include "cameraframegrabber.h"
+
 namespace camobserver {
 
 int WebCamWrapper::objectCount = 0;
 
 WebCamWrapper::WebCamWrapper()
 {
-    m_camera = cvCaptureFromCAM(CV_CAP_ANY);
-    assert(m_camera);
-    m_openCV_image = cvQueryFrame(m_camera);
-    assert(m_openCV_image);
+    QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
+    if (cameras.isEmpty()){
+        qDebug() << "No camera found!";
+        exit(1);
+    }
+    m_qcamera = new QCamera(cameras.first());
+    QCameraViewfinderSettings viewfinderSettings;
+    viewfinderSettings.setResolution(640, 480);
+    viewfinderSettings.setMinimumFrameRate(15.0);
+    viewfinderSettings.setMaximumFrameRate(30.0);
+
+    m_qcamera->setViewfinderSettings(viewfinderSettings);
+    qDebug() << cameras.first().description();
+    CameraFrameGrabber* cameraFrameGrabber = new CameraFrameGrabber();
+    m_qcamera->setViewfinder(cameraFrameGrabber);
+    connect(cameraFrameGrabber, SIGNAL(frameAvailable(QImage)), this, SLOT(takeWebcamShot(QImage)));
+    m_qcamera->start();
     objectCount++;
+    m_newImage=false;
 }
 
-IplImage* WebCamWrapper::takeWebcamShot()
+void WebCamWrapper::takeWebcamShot(QImage image)
 {
-    m_openCV_image = cvQueryFrame(m_camera);
-    return m_openCV_image;
+    m_image = image;
+    m_newImage=true;
+    qDebug() << "takeWebcamShot";
+}
+
+bool WebCamWrapper::newImage(){
+    return m_newImage;
 }
 
 cv::Mat WebCamWrapper::getWebcamAsMat(){
-    cv::Mat image = cv::cvarrToMat(m_openCV_image);
+    cv::Mat image = qt2cv_shared(m_image);
     return image;
 }
 void WebCamWrapper::setFaces(std::vector<cv::Rect_<int> > faces,
@@ -87,10 +110,11 @@ void WebCamWrapper::convertToQImage()
 }
 
 QPixmap WebCamWrapper::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{
-    takeWebcamShot();
-    addFaceRectangleToImage();
-    convertToQImage();
+{   if (m_newImage){
+        addFaceRectangleToImage();
+        convertToQImage();
+        m_newImage=false;
+    }
     return QPixmap::fromImage(m_image);
 }
 

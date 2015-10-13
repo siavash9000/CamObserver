@@ -22,8 +22,10 @@ void Brain::think() {
 }
 
 void Brain::onFacesDetectionUpdate(){
+    if (m_webcam.newImage()){
     cv::Mat image = m_webcam.getWebcamAsMat();
     emit triggerFaceDetection(image);
+    }
 }
 
 void Brain::onFacesDetection(vector<cv::Rect_<int> > faces,
