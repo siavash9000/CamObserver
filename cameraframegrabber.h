@@ -4,6 +4,8 @@
 // Qt includes
 #include <QAbstractVideoSurface>
 #include <QList>
+#include <QCamera>
+#include <QVideoProbe>
 
 class CameraFrameGrabber : public QAbstractVideoSurface
 {
@@ -13,13 +15,15 @@ public:
 
     QList<QVideoFrame::PixelFormat> supportedPixelFormats(QAbstractVideoBuffer::HandleType handleType) const;
 
+public slots:
     bool present(const QVideoFrame &frame);
 
 signals:
     void frameAvailable(QImage frame);
 
-public slots:
-
+private:
+    QCamera* m_qcamera;
+    QVideoProbe m_Probe;
 };
 
 #endif // CAMERAFRAMEGRABBER_H

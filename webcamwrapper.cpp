@@ -9,23 +9,9 @@ int WebCamWrapper::objectCount = 0;
 
 WebCamWrapper::WebCamWrapper()
 {
-    QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
-    if (cameras.isEmpty()){
-        qDebug() << "No camera found!";
-        exit(1);
-    }
-    m_qcamera = new QCamera(cameras.first());
-    QCameraViewfinderSettings viewfinderSettings;
-    viewfinderSettings.setResolution(640, 480);
-    viewfinderSettings.setMinimumFrameRate(15.0);
-    viewfinderSettings.setMaximumFrameRate(30.0);
 
-    m_qcamera->setViewfinderSettings(viewfinderSettings);
-    qDebug() << cameras.first().description();
     CameraFrameGrabber* cameraFrameGrabber = new CameraFrameGrabber();
-    m_qcamera->setViewfinder(cameraFrameGrabber);
     connect(cameraFrameGrabber, SIGNAL(frameAvailable(QImage)), this, SLOT(takeWebcamShot(QImage)));
-    m_qcamera->start();
     objectCount++;
     m_newImage=false;
 }

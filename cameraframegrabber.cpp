@@ -1,8 +1,39 @@
 #include "cameraframegrabber.h"
 #include <QDebug>
+#include <QCameraInfo>
+
 CameraFrameGrabber::CameraFrameGrabber(QObject *parent) :
     QAbstractVideoSurface(parent)
 {
+
+    QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
+    if (cameras.isEmpty()){
+        qDebug() << "No camera found!";
+        exit(1);
+    }
+    m_qcamera = new QCamera(cameras.first());
+    QCameraViewfinderSettings viewfinderSettings;
+    viewfinderSettings.setResolution(640, 480);
+    viewfinderSettings.setMinimumFrameRate(15.0);
+    viewfinderSettings.setMaximumFrameRate(30.0);
+
+    m_qcamera->setViewfinderSettings(viewfinderSettings);
+    qDebug() << cameras.first().description();
+#ifdef ANDROID
+    if (m_Probe .setSource(m_qcamera))
+    {
+        connect (& m_Probe, SIGNAL (videoFrameProbed (QVideoFrame)),this,
+                          SLOT (present (QVideoFrame)));
+    }
+   else{
+        qDebug() << "Could not set VideoProbe!";
+        exit(1);
+    }
+#else
+
+#endif
+    m_qcamera->setViewfinder(this);
+    m_qcamera->start();
 }
 
 QList<QVideoFrame::PixelFormat> CameraFrameGrabber::supportedPixelFormats(QAbstractVideoBuffer::HandleType handleType) const

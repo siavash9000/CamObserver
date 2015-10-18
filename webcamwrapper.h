@@ -30,7 +30,6 @@ public:
                   std::vector<cv::Point> facePoints);
     bool newImage();
 private:
-    QCamera* m_qcamera;
     QImage m_image;
     bool m_newImage;
     IplImage *m_openCV_image;
