@@ -7,7 +7,6 @@
 #include <QThread>
 #include "opencv2/imgproc/imgproc.hpp"
 #include "speechsynthesizer.h"
-#include <boost/circular_buffer.hpp>
 
 namespace camobserver{
 

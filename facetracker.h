@@ -4,7 +4,6 @@
 #include "webcamwrapper.h"
 #include "opencv2/core/core.hpp"
 #include "opencv2/contrib/contrib.hpp"
-#include "opencv2/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
 #include <opencv/cv.h>
@@ -17,7 +16,6 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
 #include "facerecognizer.h"
-#include <boost/circular_buffer.hpp>
 
 using namespace std;
 using namespace cv;
